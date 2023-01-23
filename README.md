@@ -2,5 +2,6 @@
 Just a bunch of cellular automata I wrote in Hy and Pyxel to learn Hy
 
 ## What I got so far
+- Langton's Ant
 - Rule30
 
