@@ -1,6 +1,6 @@
 #!/usr/bin/env hy
-(import pyxel)
-(import random [randint])
+(import pyxel
+        random [randint])
 
 
 ;; Constants (by the honor system)

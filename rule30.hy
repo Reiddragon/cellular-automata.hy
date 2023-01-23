@@ -1,5 +1,5 @@
-(import pyxel)
-(import random [randint])
+(import pyxel
+        random [randint])
 
 ;; Constants (by the honor system)
 (setv SCREEN [720 450]
