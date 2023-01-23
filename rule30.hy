@@ -9,38 +9,39 @@
       NUM_OF_SEEDS 5)
 
 ;; Init Pyxel
-(pyxel.init #* SCREEN :fps 60 :title "Rule30.hy")
+(defclass App []
+  (defn __init__ [self]
+    (pyxel.init #* SCREEN :fps 60 :title "Rule30.hy")
+    ;; Init the cells
+    (setv self.new-cells (lfor x (range pyxel.width) False)
+          self.old-cells []
+          self.time 0)
+    ;; Place the seeds
+    (for [_ (range NUM_OF_SEEDS)]
+      (setv (get self.new-cells (randint 0 (- pyxel.width 1))) True))
+    (pyxel.cls (get COLOURS "background")) ;; init the background
+    (pyxel.run self.update self.draw))
 
-;; Init the cells
-(setv new-cells (lfor x (range pyxel.width) False)
-      old-cells []
-      time 0)
+  (defn update [self]
+    (setv self.old-cells (. self.new-cells (copy)))
+    ;; rule: left XOR (middle OR right)
+    (for [i (range pyxel.width)]
+      (setv (get self.new-cells i)
+            (^
+              (get self.old-cells (% (- i 1) pyxel.width))
+              (or
+                (get self.old-cells i)
+                (get self.old-cells (% (+ i 1) pyxel.width))))))
+    (setv self.time (% (+ self.time 1) pyxel.height)))
 
-(for [_ (range NUM_OF_SEEDS)]
-  (setv (get new-cells (randint 0 (- pyxel.width 1))) True))
-
-(defn update []
-  (global time)
-  (setv old-cells (. new-cells (copy)))
-  ;; rule: left XOR (middle OR right)
-  (for [i (range pyxel.width)]
-    (setv (get new-cells i)
-          (^
-            (get old-cells (% (- i 1) pyxel.width))
-            (or
-              (get old-cells i)
-              (get old-cells (% (+ i 1) pyxel.width))))))
-  (setv time (% (+ time 1) pyxel.height)))
-
-(pyxel.cls (get COLOURS "background")) ;; Draw the background initially
-(defn draw []
-  (pyxel.line 0 time pyxel.width time (get COLOURS "background"))
-  (for [x (range pyxel.width)]
-    (if (get new-cells x)
-      (pyxel.pset x time (get COLOURS "foreground")))))
+  (defn draw [self]
+    (pyxel.line 0 self.time pyxel.width self.time (get COLOURS "background"))
+    (for [x (range pyxel.width)]
+      (if (get self.new-cells x)
+        (pyxel.pset x self.time (get COLOURS "foreground"))))))
 
 
 
 (if (= __name__ "__main__")
-  (pyxel.run update draw))
+  (App))
 
