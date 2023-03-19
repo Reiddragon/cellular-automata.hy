@@ -4,7 +4,7 @@
 
 
 ;; Constants (by the honor system)
-(setv SCREEN [128 128]
+(setv SCREEN #(128 128)
       FOREGROUND 5
       BACKGROUND 1
       ANT-COLOUR 6
@@ -55,12 +55,12 @@
     (pyxel.cls BACKGROUND)
     (for [y (range pyxel.height)]
       (for [x (range pyxel.width)]
-        (if (get self.grid x y)
+        (when (get self.grid x y)
           (pyxel.pset x y FOREGROUND))))
     (for [ant self.ants]
       (ant.draw))))
 
 
-(if (= __name__ "__main__")
+(when (= __name__ "__main__")
   (App))
 

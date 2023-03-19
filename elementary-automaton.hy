@@ -3,10 +3,9 @@
         sys [argv])
 
 ;; Constants (by the honor system)
-(setv SCREEN [720 450]
-      COLOURS
-      {"background" 0
-       "foreground" 7}
+(setv SCREEN #(720 450)
+      COLOURS {"background" 0
+               "foreground" 7}
       NUM_OF_SEEDS 5)
 
 (defclass App []
@@ -37,10 +36,10 @@
   (defn draw [self]
     (pyxel.line 0 self.time pyxel.width self.time (get COLOURS "background"))
     (for [x (range pyxel.width)]
-      (if (get self.new-cells x)
+      (when (get self.new-cells x)
         (pyxel.pset x self.time (get COLOURS "foreground"))))))
 
 
-(if (= __name__ "__main__")
+(when (= __name__ "__main__")
   (App))
 
